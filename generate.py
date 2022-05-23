@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import date
 from email.message import Message
 from functools import cached_property
 from pathlib import Path
@@ -21,8 +22,20 @@ class Plugin:
         return metadata(self.name)
 
     @cached_property
-    def url(self):
-        return self.meta.get('home-page')
+    def url(self) -> str:
+        url = self.meta.get('home-page')
+        if url == 'UNKNOWN':
+            url = None
+        if url is None:
+            return f'https://pypi.org/project/{self.name}'
+        return url
+
+    @cached_property
+    def license(self):
+        license = self.meta.get('license')
+        if license == 'UNKNOWN':
+            license = None
+        return license
 
     @cached_property
     def short_url(self):
@@ -33,13 +46,20 @@ class Plugin:
         url = url.removesuffix('/')
         return url
 
-    @cached_property
+    @property
     def author(self):
-        return self.meta.get('author')
+        author = self.meta.get('author')
+        if author is None:
+            author = self.meta.get('maintainer')
+        return author
 
-    @cached_property
+    @property
     def version(self):
         return self.meta.get('version')
+
+    @property
+    def summary(self):
+        return self.meta.get('summary')
 
     @property
     def codes(self):
@@ -51,7 +71,7 @@ plugins = [Plugin(p) for p in flake8_codes.get_installed()]
 plugins.sort(key=lambda p: p.name)
 env = Environment(loader=FileSystemLoader('templates'))
 template = env.get_template('index.html.j2')
-content = template.render(plugins=plugins)
+content = template.render(plugins=plugins, today=date.today())
 public_path = Path('public')
 public_path.mkdir(exist_ok=True)
 (public_path / 'index.html').write_text(content)

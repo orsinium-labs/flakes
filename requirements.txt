@@ -1,1 +1,2 @@
-flake8-codes
+flake8-codes[plugins]>=0.2.2
+jinja2

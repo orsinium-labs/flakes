@@ -14,26 +14,58 @@
   <body>
     <header class="text-center">
       <h1>Flakes: list of flake8 plugins and their codes</h1>
-      <p class="lead">
-        <a href="https://github.com/orsinium-labs/flakes">source code</a>
-      </p>
     </header>
     <main class="container">
+      <ul>
+        <li>
+        The page contains the list of most of flake8 plugins and their codes
+        as detected by <a href="https://github.com/orsinium-labs/flake8-codes">flake8-codes</a>.
+        </li>
+        <li>
+          If you don't see a plugin on this page, you need to add support for it
+          in flake8-codes.
+        </li>
+        <li>
+          The page is designed to assist introspecting which plugins have which rules.
+          To introspect locally installed plugins, you can use flake8-codes CLI directly.
+        </li>
+        <li>
+          If you're looking for a specific plugin to add into your project, check out
+          <a href="https://github.com/DmytroLitvinov/awesome-flake8-extensions">awesome-flake8-extensions</a>
+          list.
+        </li>
+        <li>
+          The source code for this page is available at
+          <a href="https://github.com/orsinium-labs/flakes">github.com/orsinium-labs/flakes</a>.
+        </li>
+        <li>
+          Last updated on {{ today }}.
+        </li>
+      </ul>
+
       {% for plugin in plugins %}
         <h2>{{ plugin.name }}</h2>
+        <p>{{ plugin.summary }}</p>
         <ul>
           <li>
-            <b>Version:</b> {{ plugin.version }}
+            <b>Version:</b>
+            {{ plugin.version }}
           </li>
-          {% if plugin.url %}
-              <li>
-                <b>Home page:</b> <a href="{{ plugin.url }}">{{ plugin.short_url }}</a>
-              </li>
-          {% endif %}
+          <li>
+            <b>Home page:</b>
+            <a href="{{ plugin.url }}" target="_blank">{{ plugin.short_url }}</a>
+          </li>
           {% if plugin.author %}
-              <li>
-                <b>Author:</b> {{ plugin.author }}
-              </li>
+            <li>
+              <b>Author:</b>
+              {{ plugin.author }}
+            </li>
+          {% endif %}
+          {% if plugin.license %}
+            <li>
+              <b>License:</b>
+              {{ plugin.license }}
+            </li>
           {% endif %}
         </ul>
         <table class="table">
