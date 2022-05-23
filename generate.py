@@ -71,7 +71,11 @@ plugins = [Plugin(p) for p in flake8_codes.get_installed()]
 plugins.sort(key=lambda p: p.name)
 env = Environment(loader=FileSystemLoader('templates'))
 template = env.get_template('index.html.j2')
-content = template.render(plugins=plugins, today=date.today())
+content = template.render(
+    plugins=plugins,
+    today=date.today(),
+    len=len,
+)
 public_path = Path('public')
 public_path.mkdir(exist_ok=True)
 (public_path / 'index.html').write_text(content)

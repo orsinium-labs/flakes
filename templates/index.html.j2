@@ -67,6 +67,10 @@
               {{ plugin.license }}
             </li>
           {% endif %}
+          <li>
+            <b>Checks:</b>
+            {{ len(plugin.codes) }}
+          </li>
         </ul>
         <table class="table">
           {% for code, message in plugin.codes %}
