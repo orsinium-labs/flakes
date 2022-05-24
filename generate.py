@@ -9,6 +9,20 @@ from importlib.metadata import metadata
 from jinja2 import Environment, FileSystemLoader
 
 
+# TODO: remove when netlify supports Python 3.9
+
+def remove_prefix(string: str, prefix: str) -> str:
+    if string.startswith(prefix):
+        return string[len(prefix):]
+    return string
+
+
+def remove_suffix(string: str, suffix: str) -> str:
+    if suffix and string.endswith(suffix):
+        return string[:-len(suffix)]
+    return string
+
+
 @dataclass
 class Plugin:
     _plugin:  flake8_codes.Plugin
@@ -40,10 +54,10 @@ class Plugin:
     @cached_property
     def short_url(self):
         url: str = self.url
-        url = url.removeprefix('http://')
-        url = url.removeprefix('https://')
-        url = url.removeprefix('github.com/')
-        url = url.removesuffix('/')
+        url = remove_prefix(url, 'http://')
+        url = remove_prefix(url, 'https://')
+        url = remove_prefix(url, 'github.com/')
+        url = remove_suffix(url, '/')
         return url
 
     @property
